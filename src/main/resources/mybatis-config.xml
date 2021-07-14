@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 配置打印 SQL 到控制台 以及懒加载 -->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!-- 打开延迟加载的全局开关 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <mappers>
+        <!-- 引用自身项目中mybatis的mapper，也就是第四步的文件 -->
+        <!--        <mapper resource="mapper/DeptMapper.xml"/>-->
+        <!--  <mapper resource="mapper/userMapper.xml"/>-->
+        <mapper resource="mapper/studentMapper.xml"/>
+        <mapper resource="mapper/examMapper.xml"/>
+        <mapper resource="mapper/questionMapper.xml"/>
+        <mapper resource="mapper/answerMapper.xml"/>
+        <mapper resource="mapper/scoreMapper.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shen.mapper.StudentMapper">
+<!--      插入学生信息-->
+    <insert id="addStudent" parameterType="java.util.List">
+        insert ignore into t_student
+        (
+        examCardNumber,sname,idCard,ssex,sage,eNumber,sstate
+        )
+        values
+        <foreach collection="list" item="item"  separator =",">
+            (
+            #{item.examCardNumber},#{item.sname},#{item.idCard},#{item.ssex},#{item.sage},#{item.eNumber},#{item.sstate}
+            )
+        </foreach>
+    </insert>
+<!--       联表查询学生信息,学生登录判断-->
+      <select id="selectAllStu" resultMap="selectAllStuId">
+          select t1.studentId,t1.sname,t1.idCard,t1.examCardNumber,t1.sstate,t2.eName,t2.eLevel from t_student t1,t_exam t2 where t1.eNumber=t2.eNumber
+      </select>
+    <resultMap id="selectAllStuId" type="com.shen.bean.Student">
+        <id property="studentId" column="studentId"></id>
+        <result property="sname" column="sname"/>
+        <result property="idCard" column="idCard"/>
+        <result property="sstate" column="sstate"/>
+        <result property="examCardNumber" column="examCardNumber"/>
+        <association property="exam" javaType="com.shen.bean.Exam">
+            <result property="eName" column="eName"/>
+            <result property="eLevel" column="eLevel"/>
+        </association>
+    </resultMap>
+<!--    联表查询学生登录的个人信息-->
+    <select id="stuCheckInfo" resultMap="stuCheckInfoId">
+        select t1.studentId,t1.sname,t1.idCard,t1.examCardNumber,t2.eLevel,t2.courseId,t2.eWork,t2.cName,t2.eNumber from t_student t1,t_exam t2
+        where t1.eNumber=t2.eNumber and t1.examCardNumber=#{examCardNumber}
+    </select>
+    <resultMap id="stuCheckInfoId" type="com.shen.bean.Student">
+        <id property="studentId" column="studentId"></id>
+        <result property="sname" column="sname"/>
+        <result property="idCard" column="idCard"/>
+        <result property="examCardNumber" column="examCardNumber"/>
+        <association property="exam" javaType="com.shen.bean.Exam">
+            <result property="eLevel" column="eLevel"/>
+            <result property="courseId" column="courseId"/>
+            <result property="eWork" column="eWork"/>
+            <result property="cName" column="cName"/>
+            <result property="eNumber" column="eNumber"/>
+        </association>
+    </resultMap>
+<!--    更新作弊状态-->
+    <update id="updateCheat" parameterType="String" >
+        update t_student set sstate="作弊" where examCardNumber=#{examCardNumber};
+    </update>
+
+</mapper>

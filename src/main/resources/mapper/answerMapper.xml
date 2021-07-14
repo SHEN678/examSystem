@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shen.mapper.AnswerMapper">
+
+    <insert id="addAnswer" parameterType="java.util.List">
+        insert into t_answer
+        (
+        eNumber,examCardNumber,qNumber,answer
+        )
+        values
+        <foreach collection="list" item="item"  separator =",">
+            (
+            #{item.eNumber},#{item.examCardNumber},#{item.qNumber},#{item.answer}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectScore" resultMap="selectScoreId">
+        select t1.answerId,t1.qNumber,t1.answer,t2.qAnswer,t2.qScore from t_answer t1,t_question t2
+        where t1.qNumber=t2.qNumber and t1.examCardNumber=#{examCardNumber}
+    </select>
+    <resultMap id="selectScoreId" type="com.shen.bean.Answer">
+        <id property="answerId" column="answerId"></id>
+        <result property="answer" column="answer"/>
+        <association property="question" javaType="com.shen.bean.Question">
+            <result property="qAnswer" column="qAnswer"/>
+            <result property="qScore" column="qScore"/>
+        </association>
+    </resultMap>
+
+<!--    //查询是否存在答案记录-->
+    <select id="selectAnswer" resultType="int">
+        select count(*) from t_answer where eNumber=#{eNumber} and examCardNumber=#{examCardNumber} and qNumber=#{qNumber};
+    </select>
+<!--    存在题号 更新答案-->
+    <update id="updateAnswer" parameterType="com.shen.bean.Answer">
+        update t_answer set answer=#{answer} where eNumber=#{eNumber} and examCardNumber=#{examCardNumber} and qNumber=#{qNumber};
+    </update>
+
+
+</mapper>

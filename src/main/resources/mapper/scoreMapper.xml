@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shen.mapper.ScoreMapper">
+
+    <insert id="addScore" parameterType="java.util.List">
+        replace into t_score
+        (
+        examCardNumber,eNumber,score
+        )
+        values
+        <foreach collection="list" item="item"  separator =",">
+            (
+            #{item.examCardNumber},#{item.eNumber},#{item.score}
+            )
+        </foreach>
+    </insert>
+    <select id="selectScore" resultType="com.shen.bean.ExportScore">
+        select t1.examCardNumber,t1.sname,t2.courseId,t2.cName,t2.eWork,t2.eLevel,t3.score
+        from (t_student t1 LEFT JOIN t_exam t2 on t1.eNumber=t2.eNumber)
+        LEFT JOIN t_score t3 on t1.examCardNumber=t3.examCardNumber
+    </select>
+</mapper>

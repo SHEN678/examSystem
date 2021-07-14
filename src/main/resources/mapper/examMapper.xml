@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shen.mapper.ExamMapper">
+
+    <insert id="addExam" parameterType="java.util.List">
+        insert ignore into t_exam
+        (
+          eNumber,eName,eTime,eType,eWork,eOrgan,eLevel,sNumber,eScore,courseId,cName,mDescribe,sDescribe
+        )
+        values
+        <foreach collection="list" item="item"  separator =",">
+            (
+            #{item.eNumber},#{item.eName},#{item.eTime},#{item.eType},#{item.eWork},#{item.eOrgan},#{item.eLevel},#{item.sNumber},#{item.eScore},#{item.courseId},#{item.cName},#{item.mDescribe},#{item.sDescribe}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectAllExam" resultType="com.shen.bean.Exam">
+             select * from t_exam;
+    </select>
+    <update id="updateTime" parameterType="long">
+        update t_exam set dTime=#{dTime};
+    </update>
+
+</mapper>
